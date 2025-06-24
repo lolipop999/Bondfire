@@ -8,15 +8,16 @@ public class Elevation_Entry : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
             foreach (Collider2D mountain in mountainColliders)
             {
-                mountain.enabled = false;
+                Physics2D.IgnoreCollision(collision, mountain, true);
             }
             foreach (Collider2D boundary in boundaryColliders)
             {
                 boundary.enabled = true;
+                Physics2D.IgnoreCollision(collision, boundary, false);
             }
 
             collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;

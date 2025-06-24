@@ -7,15 +7,15 @@ public class Elevation_Exit : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
             foreach (Collider2D mountain in mountainColliders)
             {
-                mountain.enabled = true;
+                Physics2D.IgnoreCollision(collision, mountain, false);
             }
             foreach (Collider2D boundary in boundaryColliders)
             {
-                boundary.enabled = false;
+                Physics2D.IgnoreCollision(collision, boundary, true);
             }
 
             collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
