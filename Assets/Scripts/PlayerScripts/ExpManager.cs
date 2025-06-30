@@ -40,6 +40,7 @@ public class ExpManager : MonoBehaviour
     private void LevelUp()
     {
         level++;
+        FXManager.Instance.PlaySound(FXManager.Instance.levelUp);
         currentExp -= expToLevel;
         expToLevel = Mathf.RoundToInt(expToLevel * expGrowthMultiplier);
         OnLevelUp?.Invoke(1);

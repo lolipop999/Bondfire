@@ -26,6 +26,9 @@ public class SkillManager : MonoBehaviour
             case "ArcherMode":
                 StatsManager.Instance.archer = true;
                 break;
+            case "HammerMode":
+                StatsManager.Instance.hammer = true;
+                break;
             default:
                 Debug.LogWarning("Unknown skill: " + skillName);
                 break;

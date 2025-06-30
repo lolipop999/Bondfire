@@ -18,7 +18,7 @@ public class SkillTreeManager : MonoBehaviour
 
     private void CheckAvailablePoints(SkillSlot slot)
     {
-        if (availablePoints > slot.skillSO.cost)
+        if (availablePoints >= slot.skillSO.cost)
         {
             slot.TryUpgradeSkill();
         }
@@ -52,7 +52,7 @@ public class SkillTreeManager : MonoBehaviour
     }
     
     private void HandleSkillMaxed(SkillSlot skillSlot)
-    {
+    { 
         foreach (SkillSlot slot in skillSlots)
         {
             if (!slot.isUnlocked && slot.CanUnlockSkill())

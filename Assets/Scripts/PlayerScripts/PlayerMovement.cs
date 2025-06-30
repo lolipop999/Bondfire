@@ -13,13 +13,14 @@ public class PlayerMovement : MonoBehaviour
     public int facingDirection = 1; // 1 is right, -1 is left
     private bool isKnockedBack;
     public bool isShooting;
-    public Player_Combat player_Combat;
+    public bool isSmashing;
+    public Player_Sword sword;
 
     private void Update() // fastest way to get feedback
     {
         if (Input.GetButtonDown("Slash"))
         {
-            player_Combat.Attack();
+            sword.Attack();
         }
     }
 

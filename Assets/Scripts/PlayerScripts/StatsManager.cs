@@ -24,7 +24,22 @@ public class StatsManager : MonoBehaviour
 
     [Header("Combat Abilities")]
     public bool archer = false;
+    public bool hammer = false;
 
+    private PlayerHealth playerHealth;
+    private PlayerEffects playerEffects;
+
+    void Start()
+    {
+        if (playerHealth == null)
+        {
+            playerHealth = GameObject.FindWithTag("Player").GetComponent<PlayerHealth>();
+        }
+        if (playerEffects == null)
+        {
+            playerEffects = GameObject.FindWithTag("Player").GetComponent<PlayerEffects>();
+        }   
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -37,15 +52,18 @@ public class StatsManager : MonoBehaviour
     {
         maxHealth += amount;
         healthText.text = "HP: " + currentHealth + " / " + maxHealth;
+        playerHealth.HealthAnimation();
     }
 
     public IEnumerator SpeedBoost(float boostAmount, float duration)
     {
+        playerEffects.EnableSpeedBoostTrail(true);
         float originalSpeed = speed;
         speed = originalSpeed + boostAmount;
 
         yield return new WaitForSeconds(duration);
 
         speed = originalSpeed;
+        playerEffects.EnableSpeedBoostTrail(false);
     }
 }

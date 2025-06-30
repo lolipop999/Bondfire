@@ -3,35 +3,33 @@ using UnityEngine;
 
 public class Enemy_Health : MonoBehaviour
 {
-    public int expReward = 3;
+    public EnemyData data;
     public delegate void MonsterDefeated(int exp);
     public static event MonsterDefeated OnMonsterDefeated;
     public static event Action OnEnemyDeath;
-    public int currentHealth;
-    public int maxHealth;
+    private int currentHealth;
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = data.maxHealth;
     }
 
     public void ChangeHealth(int amount)
     {
         currentHealth += amount;
-        if (currentHealth > maxHealth)
+        if (currentHealth > data.maxHealth)
         {
-            currentHealth = maxHealth;
+            currentHealth = data.maxHealth;
         }
         if (currentHealth <= 0)
         {
             EnemyDead();
-            
         }
     }
 
     private void EnemyDead()
     {
-        OnMonsterDefeated(expReward);
+        OnMonsterDefeated(data.expReward);
         OnEnemyDeath();
         Destroy(gameObject);
     }

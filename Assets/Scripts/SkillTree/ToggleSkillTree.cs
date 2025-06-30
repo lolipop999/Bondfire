@@ -16,18 +16,20 @@ public class ToggleSkillTree : MonoBehaviour
         {
             if (statsOpen)
             {
-                
                 Time.timeScale = 1;
                 skillsCanvas.alpha = 0;
                 skillsCanvas.blocksRaycasts = false;
+                skillsCanvas.interactable = false;
                 statsCanvas.alpha = 0;
                 statsOpen = false;
             }
             else
             {
                 Time.timeScale = 0;
+                FXManager.Instance.PlaySound(FXManager.Instance.openStats, 0.3f);
                 skillsCanvas.alpha = 1;
                 skillsCanvas.blocksRaycasts = true;
+                skillsCanvas.interactable = true;
                 statsOn();
                 statsCanvas.alpha = 1;
                 statsOpen = true;

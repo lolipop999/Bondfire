@@ -2,23 +2,24 @@ using UnityEngine;
 
 public class Health_Powerup : MonoBehaviour
 {
+    private PlayerEffects playerEffects;
 
-    public Animator textUpdate;
-
+    void Start()
+    {
+        if (playerEffects == null)
+        {
+            playerEffects = GameObject.FindWithTag("Player").GetComponent<PlayerEffects>();
+        }
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             if (StatsManager.Instance.currentHealth < StatsManager.Instance.maxHealth)
             {
-                Debug.Log("healing player");
-                textUpdate.SetTrigger("UpdateText");
                 StatsManager.Instance.currentHealth++;
+                playerEffects.EnableHealthBoostParticles();
                 StatsManager.Instance.UpdateMaxHealth(0);
-            }
-            else
-            {
-                Debug.Log("full health");
             }
             Destroy(gameObject);
         }

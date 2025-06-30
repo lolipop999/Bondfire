@@ -1,12 +1,11 @@
 using UnityEngine;
 
-public class Player_Combat : MonoBehaviour
+public class Player_Hammer : MonoBehaviour
 {
     public Animator anim;
     public Transform attackPoint;
     public LayerMask enemyLayer;
-    public StatsUI statsUI;
-
+    public PlayerMovement playerMovement;
 
     private float timer;
     private void Update()
@@ -15,17 +14,20 @@ public class Player_Combat : MonoBehaviour
         {
             timer -= Time.deltaTime;
         }
-    }
-
-    public void Attack()
-    {
-        if (timer <= 0)
+        if (Input.GetButtonDown("Attack") && timer <= 0)
         {
-            anim.SetBool("isAttacking", true);
+            Smash();
         }
     }
 
-    public void DealDamage()
+    public void Smash()
+    {
+        playerMovement.isSmashing = true;
+        anim.SetBool("isSmashing", true);
+        timer = StatsManager.Instance.coolDown;
+    }
+
+    public void SmashDamage()
     {
         Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position, StatsManager.Instance.weaponRange, enemyLayer);
 
@@ -33,16 +35,25 @@ public class Player_Combat : MonoBehaviour
         {
             foreach (Collider2D enemy in enemies)
             {
+                FXManager.Instance.PlaySound(FXManager.Instance.swordHitEnemy);
                 enemy.GetComponent<Enemy_Health>().ChangeHealth(-StatsManager.Instance.damage);
                 enemy.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.knockbackForce, StatsManager.Instance.knockbackTime, StatsManager.Instance.stunTime);
             }
         }
-        timer = StatsManager.Instance.coolDown;
-        statsUI.UpdateDamage();
+        FXManager.Instance.PlaySound(FXManager.Instance.swordSwing);
     }
 
-    public void FinishAttacking()
+    public void FinishSmash()
     {
-        anim.SetBool("isAttacking", false);
+        anim.SetBool("isSmashing", false);
+    }
+
+    private void OnEnable()
+    {
+        anim.SetLayerWeight(2, 1);
+    }
+    private void OnDisable()
+    {
+        anim.SetLayerWeight(2, 0);
     }
 }

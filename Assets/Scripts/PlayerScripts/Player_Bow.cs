@@ -50,13 +50,10 @@ public class Player_Bow : MonoBehaviour
     }
     private void OnEnable()
     {
-        // enabled layer
-        anim.SetLayerWeight(0, 0);
         anim.SetLayerWeight(1, 1);
     }
     private void OnDisable()
     {
-        anim.SetLayerWeight(0, 1);
         anim.SetLayerWeight(1, 0);
     }
 }
