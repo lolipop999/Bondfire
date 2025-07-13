@@ -15,11 +15,11 @@ MonoBehaviour:
   speed: 1.2
   maxHealth: 8
   damage: 2
-  attackRange: 5
+  attackRange: 3
   attackCoolDown: 3
   expReward: 6
-  knockbackForce: 7
-  stunTime: 0.2
+  knockbackForce: 10
+  stunTime: 0.4
   playerDetectRange: 7
   idleTime: 5
   forcedChaseDuration: 10

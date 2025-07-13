@@ -8,6 +8,7 @@ public class Enemy_Movement : MonoBehaviour
     public EnemyData data;
     public LayerMask playerLayer;
     public Transform detectionPoint;
+    public bool stealth;
     private float attackCoolDownTimer;
     private Rigidbody2D rb;
     private Transform player;
@@ -23,10 +24,17 @@ public class Enemy_Movement : MonoBehaviour
         anim = GetComponent<Animator>();
         ChangeState(EnemyState.Idle);
         attackCoolDownTimer = data.attackCoolDown;
+        stealth = StealthManager.IsStealthActive;
     }
 
     void Update()
     {
+        if (stealth)
+        {
+            rb.linearVelocity = Vector2.zero;
+            ChangeState(EnemyState.Idle);
+            return;
+        }
         if (enemyState != EnemyState.Knockback)
         {
             CheckForPlayer();
@@ -41,9 +49,32 @@ public class Enemy_Movement : MonoBehaviour
             else if (enemyState == EnemyState.Attacking)
             {
                 rb.linearVelocity = Vector2.zero;
-            }        
+            }
         }
     }
+
+    void OnEnable()
+    {
+        StealthManager.OnStealthChanged += HandleStealthChange;
+    }
+
+    void OnDisable()
+    {
+        StealthManager.OnStealthChanged -= HandleStealthChange;
+    }
+
+    private void HandleStealthChange(bool active)
+    {
+        if (active)
+        {
+            stealth = true;
+        }
+        else
+        {
+            stealth = false;
+        }
+    }
+
 
     void Chase()
     {

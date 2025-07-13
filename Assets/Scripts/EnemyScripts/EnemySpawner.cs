@@ -43,7 +43,22 @@ public class EnemySpawner : MonoBehaviour
         while (currentWaveIndex < waves.Length)
         {
             yield return StartCoroutine(ShowWaveAnnouncement(currentWaveIndex + 1));
-
+            // resets abilities every wave
+            if (StatsManager.Instance.regenHealth)
+            {
+                if (StatsManager.Instance.currentHealth < StatsManager.Instance.maxHealth)
+                {
+                    StatsManager.Instance.currentHealth += 1;
+                }
+            }
+            if (StatsManager.Instance.shieldAbility)
+            {
+                StatsManager.Instance.shieldActive = true;
+            }
+            if (StatsManager.Instance.stealth)
+            {
+                StatsManager.Instance.stealthUsed = false;
+            }
             Wave wave = waves[currentWaveIndex];
             for (int i = 0; i < wave.enemyCount; i++)
             {

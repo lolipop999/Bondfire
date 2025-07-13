@@ -24,7 +24,7 @@ public class Player_Hammer : MonoBehaviour
     {
         playerMovement.isSmashing = true;
         anim.SetBool("isSmashing", true);
-        timer = StatsManager.Instance.coolDown;
+        timer = StatsManager.Instance.hammerCoolDown;
     }
 
     public void SmashDamage()

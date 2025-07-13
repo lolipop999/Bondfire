@@ -16,13 +16,19 @@ public class PowerupSpawner : MonoBehaviour
 {
     public List<PowerupEntry> powerups;
     public float minSpawnTime = 5f;
-    public float maxSpawnTime = 10f;
+    public float maxSpawnTime = 20f;
     public Vector2 spawnAreaBottomLeft;
     public Vector2 spawnAreaTopRight;
 
     void Start()
     {
         StartCoroutine(SpawnPowerupRoutine());
+    }
+
+    public void IncreaseLuck()
+    {
+        minSpawnTime *= 0.8f;
+        maxSpawnTime *= 0.9f;
     }
 
     IEnumerator SpawnPowerupRoutine()

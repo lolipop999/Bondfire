@@ -16,11 +16,19 @@ public class PlayerMovement : MonoBehaviour
     public bool isSmashing;
     public Player_Sword sword;
 
-    private void Update() // fastest way to get feedback
+    void Update() // fastest way to get feedback
     {
         if (Input.GetButtonDown("Slash"))
         {
             sword.Attack();
+        }
+        if (StatsManager.Instance.stealth && !StatsManager.Instance.stealthUsed)
+        {
+            if (Input.GetButtonDown("StealthAbility"))
+            {
+                StealthManager.Instance.ActivateStealth(StatsManager.Instance.stealthLevel * 3);
+                StatsManager.Instance.stealthUsed = true;
+            }
         }
     }
 
@@ -69,6 +77,15 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(stunTime);
         rb.linearVelocity = Vector2.zero;
+        isKnockedBack = false;
+    }
+
+    public void EnableKnockback()
+    {
+        isKnockedBack = true;
+    }
+    public void DisableKnockback()
+    {
         isKnockedBack = false;
     }
 }

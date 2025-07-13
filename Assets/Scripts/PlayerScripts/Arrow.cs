@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class Arrow : MonoBehaviour
 {
@@ -9,15 +12,7 @@ public class Arrow : MonoBehaviour
     // BUG: 6/20/25, enemy cannot move in direction arrow hit them
     // solved
     public Rigidbody2D rb;
-    public UnityEngine.Vector2 direction = UnityEngine.Vector2.right;
-
-    public float speed;
-    public int damage;
-    public float knockbackForce;
-    public float knockbackTime;
-    public float stunTime;
-    public float maxTravelDistance;
-
+    public Vector2 direction = Vector2.right;
     public LayerMask enemyLayer;
     public LayerMask obstacleLayer;
     public SpriteRenderer sr;
@@ -25,7 +20,7 @@ public class Arrow : MonoBehaviour
 
     private SpriteRenderer playerRenderer;
     private float lifeSpan = 5;
-    private UnityEngine.Vector2 startPosition;
+    private Vector2 startPosition;
     private float slowdownRate = 1f; // stimulate drag
     private bool inAir = true;
     private bool falling;
@@ -34,9 +29,9 @@ public class Arrow : MonoBehaviour
 
     void Start()
     {
-        playerRenderer = GetComponent<SpriteRenderer>();
-        sr.sortingOrder = playerRenderer.sortingOrder;
-        rb.linearVelocity = direction * speed;
+        playerRenderer = GameObject.FindWithTag("Player").GetComponent<SpriteRenderer>();
+        sr.sortingOrder = playerRenderer.sortingOrder - 1;
+        rb.linearVelocity = direction * StatsManager.Instance.arrowSpeed;
         startPosition = transform.position;
         arrowCollider = GetComponent<Collider2D>();
         RotateArrow();
@@ -46,9 +41,9 @@ public class Arrow : MonoBehaviour
 
     void FixedUpdate()
     {
-        float distanceTraveled = UnityEngine.Vector2.Distance(startPosition, transform.position);
+        float distanceTraveled = Vector2.Distance(startPosition, transform.position);
 
-        if (distanceTraveled >= maxTravelDistance)
+        if (distanceTraveled >= StatsManager.Instance.arrowMaxDistance)
         {
             falling = true;
         }
@@ -57,13 +52,16 @@ public class Arrow : MonoBehaviour
             float currentAngle = Mathf.Atan2(rb.linearVelocityY, rb.linearVelocityX) * Mathf.Rad2Deg;
             float targetAngle = -90f; // pointing down
             float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, rotationSpeed * Time.fixedDeltaTime);
-            transform.eulerAngles = new UnityEngine.Vector3(0, 0, newAngle);
+            transform.eulerAngles = new Vector3(0, 0, newAngle);
             slowdownRate = 0.99f;
-            if (distanceTraveled >= maxTravelDistance * 1.5)
+            if (distanceTraveled >= StatsManager.Instance.arrowMaxDistance * 1.5)
             {
                 // BUG: when hits ground arrow always looks exactly like sprite
-                rb.linearVelocity = UnityEngine.Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
+                float saveAngle = transform.eulerAngles.z;
                 sr.sprite = buriedArrow;
+                float offset = ChooseOffset();
+                transform.eulerAngles = new Vector3(0, 0, saveAngle + offset);
                 inAir = false;
                 arrowCollider.enabled = false;
             }
@@ -72,6 +70,37 @@ public class Arrow : MonoBehaviour
         rb.linearVelocity *= slowdownRate; // drag
     }
 
+    private float ChooseOffset()
+    {
+        // map each direction to an offset
+        Dictionary<Vector2, float> directionOffsets = new Dictionary<Vector2, float>()
+        {
+            { Vector2.up, 100f },
+            { Vector2.down, 280f },
+            { Vector2.left, 190f },
+            { Vector2.right, 0f },
+            { new Vector2(1,1).normalized, 45f },
+            { new Vector2(-1,1).normalized, 135f },
+            { new Vector2(1,-1).normalized, -45f },
+            { new Vector2(-1,-1).normalized, 225f },
+        };
+
+        float bestDot = -1f;
+        float chosenOffset = 0f;
+
+
+        foreach (var kvp in directionOffsets)
+        {
+            float dot = Vector2.Dot(direction, kvp.Key);
+            if (dot > bestDot)
+            {
+                bestDot = dot;
+                chosenOffset = kvp.Value;
+            }
+        }
+        return chosenOffset;
+    }
+    
     private void RotateArrow()
     {
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -90,13 +119,13 @@ public class Arrow : MonoBehaviour
             }
             if ((enemyLayer.value & (1 << collision.gameObject.layer)) > 0)
             {
-                collision.gameObject.GetComponent<Enemy_Health>().ChangeHealth(-damage);
-                collision.gameObject.GetComponent<Enemy_Knockback>().Knockback(transform, knockbackForce, knockbackTime, stunTime);
+                collision.gameObject.GetComponent<Enemy_Health>().ChangeHealth(-StatsManager.Instance.arrowDamage);
+                collision.gameObject.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.arrowKnockbackForce, StatsManager.Instance.arrowKnockbackTime, StatsManager.Instance.arrowStunTime);
                 AttachToTarget(collision.gameObject.transform);
                 GetComponent<Collider2D>().enabled = false;
                 FXManager.Instance.PlaySound(FXManager.Instance.arrowHit, 0.25f);
             }
-            else if ((obstacleLayer.value & (1 << collision.gameObject.layer)) > 0)
+            else if ((obstacleLayer.value & (1 << collision.gameObject.layer)) > 0 && sr.sortingOrder < 10)
             {
                 AttachToTarget(collision.gameObject.transform);
                 GetComponent<Collider2D>().enabled = false;

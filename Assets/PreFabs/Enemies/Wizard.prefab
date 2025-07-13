@@ -118,7 +118,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 1175497388384161881, guid: 5831d9a17182ca74aaa448ec5091ee20, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -169,6 +169,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   attackPoint: {fileID: 7467819609176855473}
+  beamPrefab: {fileID: 5905396929466218408, guid: 1765de3672e96e44e9d42a38421980dd, type: 3}
+  impactParticlesPrefab: {fileID: 4916846502507412451, guid: 8bcd84330f3d9e54fa91c5cef94021e5, type: 3}
 --- !u!114 &3532056388047230304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +188,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   detectionPoint: {fileID: 4145149478057863335}
+  stealth: 0
 --- !u!50 &3036923447401349163
 Rigidbody2D:
   serializedVersion: 5

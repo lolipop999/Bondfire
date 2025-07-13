@@ -20,7 +20,7 @@ public class Player_Sword : MonoBehaviour
         if (timer <= 0)
         {
             anim.SetBool("isSlashing", true);
-            timer = StatsManager.Instance.coolDown;
+            timer = StatsManager.Instance.swordCoolDown;
         }
     }
 

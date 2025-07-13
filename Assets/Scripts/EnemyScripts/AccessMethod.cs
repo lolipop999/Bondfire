@@ -19,7 +19,6 @@ public class AccessMethod : MonoBehaviour
             if (split.Length == 2)
             {
                 resolver.SetCategoryAndLabel(split[0], split[1]);
-                Debug.Log(GetComponent<SpriteRenderer>().sprite.name);
             }
         }
     }

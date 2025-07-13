@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class StatsUI : MonoBehaviour
 {
@@ -39,7 +40,7 @@ public class StatsUI : MonoBehaviour
 
     public void UpdateSpeed()
     {
-        statsSlots[2].GetComponentInChildren<TMP_Text>().text = "Speed: " + StatsManager.Instance.speed;
+        statsSlots[2].GetComponentInChildren<TMP_Text>().text = "Speed: " + Convert.ToInt32(StatsManager.Instance.speed);
     }
 
     public void UpdateAllStats()
