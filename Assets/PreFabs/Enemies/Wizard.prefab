@@ -170,7 +170,8 @@ MonoBehaviour:
     m_Bits: 256
   attackPoint: {fileID: 7467819609176855473}
   beamPrefab: {fileID: 5905396929466218408, guid: 1765de3672e96e44e9d42a38421980dd, type: 3}
-  impactParticlesPrefab: {fileID: 4916846502507412451, guid: 8bcd84330f3d9e54fa91c5cef94021e5, type: 3}
+  magicBurst: {fileID: 4916846502507412451, guid: 8bcd84330f3d9e54fa91c5cef94021e5, type: 3}
+  rockSmash: {fileID: 0}
 --- !u!114 &3532056388047230304
 MonoBehaviour:
   m_ObjectHideFlags: 0

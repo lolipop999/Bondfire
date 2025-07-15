@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.Collections;
 
 public class ExpManager : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class ExpManager : MonoBehaviour
     public float expGrowthMultiplier = 1.2f;
     public Slider expSlider;
     public TMP_Text currentLevelText;
+    public CanvasGroup powerupCanvas;
+    private int expMultiplier = 1;
+    private float fadeDuration = 0.5f;
 
     public static event Action<int> OnLevelUp;
 
@@ -19,17 +23,9 @@ public class ExpManager : MonoBehaviour
         UpdateUI();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            GainExperience(2);
-        }
-    }
-
     public void GainExperience(int amount)
     {
-        currentExp += amount;
+        currentExp += amount * expMultiplier;
         if (currentExp >= expToLevel)
         {
             LevelUp();
@@ -60,5 +56,35 @@ public class ExpManager : MonoBehaviour
     private void OnDisable()
     {
         Enemy_Health.OnMonsterDefeated -= GainExperience;
+    }
+
+    public IEnumerator doubleXP(float duration)
+    {
+        expMultiplier = 2;
+        // Fade IN
+        yield return StartCoroutine(FadeCanvas(powerupCanvas, 0f, 1f, fadeDuration));
+
+        // Keep the canvas visible for the power‑up’s active time
+        yield return new WaitForSeconds(duration);
+
+        // Fade OUT
+        yield return StartCoroutine(FadeCanvas(powerupCanvas, 1f, 0f, fadeDuration));
+
+        expMultiplier = 1;
+    }
+
+    private IEnumerator FadeCanvas(CanvasGroup cg, float from, float to, float time)
+    {
+        cg.alpha = from;
+        float t = 0f;
+
+        while (t < time)
+        {
+            t += Time.deltaTime;
+            cg.alpha = Mathf.Lerp(from, to, t / time);
+            yield return null;
+        }
+
+        cg.alpha = to;
     }
 }

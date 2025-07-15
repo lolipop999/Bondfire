@@ -9,7 +9,7 @@ public class Enemy_Combat : MonoBehaviour
     public Transform attackPoint;
     public GameObject beamPrefab;
     private float beamTime = 0.1f;
-    public GameObject impactParticlesPrefab;
+    public GameObject magicBurst;
     public GameObject rockSmash;
 
     public void Attack()
@@ -55,7 +55,8 @@ public class Enemy_Combat : MonoBehaviour
         FXManager.Instance.PlaySound(FXManager.Instance.rockSmash, 0.5f);
 
         // Instantiate effect
-        Instantiate(rockSmash, spawnPosition, Quaternion.identity);
+        GameObject rockFX = Instantiate(rockSmash, spawnPosition, Quaternion.identity);
+        Destroy(rockFX, 1f);
     }
 
     private void WizardAttack(Collider2D player)
@@ -88,7 +89,8 @@ public class Enemy_Combat : MonoBehaviour
             yield return null;
         }
 
-        Instantiate(impactParticlesPrefab, end, Quaternion.identity);
+        GameObject magicFX = Instantiate(magicBurst, end, Quaternion.identity);
+        Destroy(magicFX, 1f);
 
         // Fade the beam out
         float fadeTime = 0.2f;

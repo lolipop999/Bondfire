@@ -47,17 +47,15 @@ public class StatsManager : MonoBehaviour
 
     private PlayerHealth playerHealth;
     private PlayerEffects playerEffects;
+    private SpriteRenderer playerSprite;
+    private Transform playerTransform;
 
     void Start()
     {
-        if (playerHealth == null)
-        {
-            playerHealth = GameObject.FindWithTag("Player").GetComponent<PlayerHealth>();
-        }
-        if (playerEffects == null)
-        {
-            playerEffects = GameObject.FindWithTag("Player").GetComponent<PlayerEffects>();
-        }   
+        playerHealth = GameObject.FindWithTag("Player").GetComponent<PlayerHealth>();
+        playerEffects = GameObject.FindWithTag("Player").GetComponent<PlayerEffects>();
+        playerSprite = GameObject.FindWithTag("Player").GetComponent<SpriteRenderer>();
+        playerTransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
     private void Awake()
     {
@@ -84,5 +82,46 @@ public class StatsManager : MonoBehaviour
 
         speed = originalSpeed;
         playerEffects.EnableSpeedBoostTrail(false);
+    }
+
+    public IEnumerator RageEffect(float duration)
+    {
+        // Store original values
+        Color originalColor = playerSprite.color;
+        Vector3 originalScale = playerTransform.localScale;
+        int originalDamage = damage;
+        float originalWeaponRange = weaponRange;
+        float originalArrowMaxDistance = arrowMaxDistance;
+        float originalStunTime = stunTime;
+        float originalArrowStunTime = arrowStunTime;
+        float originalSwordCooldown = swordCoolDown;
+        float originalHammerCooldown = hammerCoolDown;
+        float originalShootCooldown = shootCooldown;
+
+        // Apply rage effect
+        playerSprite.color = new Color32(255, 194, 250, 255);
+        playerTransform.localScale *= 1.2f;
+        damage += 1;
+        weaponRange += 0.2f;
+        arrowMaxDistance += 1.5f;
+        stunTime += 0.1f;
+        arrowStunTime += 0.1f;
+        swordCoolDown -= 0.2f;
+        hammerCoolDown -= 0.5f;
+        shootCooldown -= 0.2f;
+
+        yield return new WaitForSeconds(duration);
+
+        // Revert to original values
+        playerSprite.color = originalColor;
+        playerTransform.localScale = originalScale;
+        damage = originalDamage;
+        weaponRange = originalWeaponRange;
+        arrowMaxDistance = originalArrowMaxDistance;
+        stunTime = originalStunTime;
+        arrowStunTime = originalArrowStunTime;
+        swordCoolDown = originalSwordCooldown;
+        hammerCoolDown = originalHammerCooldown;
+        shootCooldown = originalShootCooldown;
     }
 }

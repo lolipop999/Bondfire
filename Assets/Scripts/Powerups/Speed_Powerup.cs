@@ -10,14 +10,7 @@ public class Speed_Powerup : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (StatsManager.Instance != null)
-            {
-                StatsManager.Instance.StartCoroutine(StatsManager.Instance.SpeedBoost(speedBoost, boostDuration));
-            }
-            else
-            {
-                Debug.Log("stats manager is null");
-            }
+            StatsManager.Instance.StartCoroutine(StatsManager.Instance.SpeedBoost(speedBoost, boostDuration));
 
             Destroy(gameObject);
         }
