@@ -6,7 +6,7 @@ public class Enemy_Health : MonoBehaviour
     public EnemyData data;
     public delegate void MonsterDefeated(int exp);
     public static event MonsterDefeated OnMonsterDefeated;
-    public static event Action OnEnemyDeath;
+    public static event Action<GameObject> OnEnemyDeath;
     private int currentHealth;
 
     private void Start()
@@ -30,7 +30,7 @@ public class Enemy_Health : MonoBehaviour
     private void EnemyDead()
     {
         OnMonsterDefeated(data.expReward);
-        OnEnemyDeath();
+        OnEnemyDeath?.Invoke(gameObject);
         Destroy(gameObject);
     }
 }

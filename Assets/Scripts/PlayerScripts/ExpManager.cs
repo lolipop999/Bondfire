@@ -6,13 +6,13 @@ using System.Collections;
 
 public class ExpManager : MonoBehaviour
 {
-    public int level;
-    public int currentExp;
     public int expToLevel = 10;
     public float expGrowthMultiplier = 1.2f;
     public Slider expSlider;
     public TMP_Text currentLevelText;
     public CanvasGroup powerupCanvas;
+    private int level = 0;
+    private int currentExp = 0;
     private int expMultiplier = 1;
     private float fadeDuration = 0.5f;
 
@@ -31,6 +31,11 @@ public class ExpManager : MonoBehaviour
             LevelUp();
         }
         UpdateUI();
+    }
+
+    public int GetLevel()
+    {
+        return level;   
     }
 
     private void LevelUp()

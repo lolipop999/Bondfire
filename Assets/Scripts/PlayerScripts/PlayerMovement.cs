@@ -13,15 +13,9 @@ public class PlayerMovement : MonoBehaviour
     public int facingDirection = 1; // 1 is right, -1 is left
     private bool isKnockedBack;
     public bool isShooting;
-    public bool isSmashing;
-    public Player_Sword sword;
 
     void Update() // fastest way to get feedback
-    {
-        if (Input.GetButtonDown("Slash"))
-        {
-            sword.Attack();
-        }
+    { // handles stealth ability
         if (StatsManager.Instance.stealth && !StatsManager.Instance.stealthUsed)
         {
             if (Input.GetButtonDown("StealthAbility"))
@@ -33,8 +27,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called 50x per second
-    void FixedUpdate()
-    {
+    void FixedUpdate() 
+    { // handles movement
         if (isShooting == true)
         {
             rb.linearVelocity = Vector2.zero;

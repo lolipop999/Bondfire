@@ -22,14 +22,13 @@ public class Player_Hammer : MonoBehaviour
 
     public void Smash()
     {
-        playerMovement.isSmashing = true;
         anim.SetBool("isSmashing", true);
         timer = StatsManager.Instance.hammerCoolDown;
     }
 
     public void SmashDamage()
     {
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position, StatsManager.Instance.weaponRange, enemyLayer);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position, StatsManager.Instance.hammerRange, enemyLayer);
 
         if (enemies.Length > 0)
         {

@@ -13,31 +13,35 @@ public class Player_Sword : MonoBehaviour
         {
             timer -= Time.deltaTime;
         }
+        if (Input.GetButtonDown("Slash") && timer <= 0)
+        {
+            Attack();
+        }
     }
 
     public void Attack()
     {
-        if (timer <= 0)
-        {
-            anim.SetBool("isSlashing", true);
-            timer = StatsManager.Instance.swordCoolDown;
-        }
+        anim.SetBool("isSlashing", true);
+        timer = StatsManager.Instance.swordCoolDown;
     }
 
     public void DealDamage()
     {
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position, StatsManager.Instance.weaponRange, enemyLayer);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position, StatsManager.Instance.hammerRange, enemyLayer);
 
         if (enemies.Length > 0)
         {
+            FXManager.Instance.PlaySound(FXManager.Instance.swordHitEnemy, 0.3f);
             foreach (Collider2D enemy in enemies)
             {
-                FXManager.Instance.PlaySound(FXManager.Instance.swordHitEnemy);
                 enemy.GetComponent<Enemy_Health>().ChangeHealth(-StatsManager.Instance.damage);
                 enemy.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.knockbackForce, StatsManager.Instance.knockbackTime, StatsManager.Instance.stunTime);
             }
         }
-        FXManager.Instance.PlaySound(FXManager.Instance.swordSwing);
+        else
+        {
+            FXManager.Instance.PlaySound(FXManager.Instance.swordSwing, 0.3f);
+        }
     }
 
     public void FinishAttacking()

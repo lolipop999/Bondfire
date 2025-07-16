@@ -11,14 +11,13 @@ GameObject:
   - component: {fileID: 4970159383628846566}
   - component: {fileID: 540563103325683205}
   - component: {fileID: 4680627756338817400}
-  - component: {fileID: 4031308713842115694}
   m_Layer: 0
   m_Name: CutSceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4970159383628846566
 Transform:
   m_ObjectHideFlags: 0
@@ -68,24 +67,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   director: {fileID: 540563103325683205}
-  player: {fileID: 0}
   enemySpawner: {fileID: 0}
   UI: {fileID: 0}
   startPlayer: {fileID: 0}
   playerMovement: {fileID: 0}
   playerUI: {fileID: 0}
---- !u!114 &4031308713842115694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8652736053999029916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb380e760bf0242b564175fa4536fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  director: {fileID: 0}
   player: {fileID: 0}
-  cameraTarget: {fileID: 0}

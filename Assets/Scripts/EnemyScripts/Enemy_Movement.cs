@@ -9,6 +9,7 @@ public class Enemy_Movement : MonoBehaviour
     public LayerMask playerLayer;
     public Transform detectionPoint;
     public bool stealth;
+    public bool stopMoving = false;
     private float attackCoolDownTimer;
     private Rigidbody2D rb;
     private Transform player;
@@ -29,7 +30,7 @@ public class Enemy_Movement : MonoBehaviour
 
     void Update()
     {
-        if (stealth)
+        if (stealth || stopMoving)
         {
             rb.linearVelocity = Vector2.zero;
             ChangeState(EnemyState.Idle);

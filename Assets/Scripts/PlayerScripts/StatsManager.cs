@@ -9,13 +9,14 @@ public class StatsManager : MonoBehaviour
 
     [Header("Combat Stats")]
     public int damage;
-    public float weaponRange;
+    public float swordRange;
+    public float hammerRange;
     public float knockbackForce;
     public float knockbackTime;
     public float stunTime;
     public float swordCoolDown = 1.2f;
     public float hammerCoolDown = 2f;
-    public float shootCooldown = 0.5f;
+
     [Header("Archer Stats")]
     public float arrowSpeed = 7;
     public int arrowDamage = 1;
@@ -23,6 +24,7 @@ public class StatsManager : MonoBehaviour
     public float arrowKnockbackTime = 0.2f;
     public float arrowStunTime = 0.3f;
     public float arrowMaxDistance = 4;
+    public float shootCooldown = 0.5f;
 
     [Header("Movement Stats")]
     public float speed;
@@ -90,7 +92,8 @@ public class StatsManager : MonoBehaviour
         Color originalColor = playerSprite.color;
         Vector3 originalScale = playerTransform.localScale;
         int originalDamage = damage;
-        float originalWeaponRange = weaponRange;
+        float originalSwordRange = swordRange;
+        float originalHammerRange = hammerRange;
         float originalArrowMaxDistance = arrowMaxDistance;
         float originalStunTime = stunTime;
         float originalArrowStunTime = arrowStunTime;
@@ -102,7 +105,8 @@ public class StatsManager : MonoBehaviour
         playerSprite.color = new Color32(255, 194, 250, 255);
         playerTransform.localScale *= 1.2f;
         damage += 1;
-        weaponRange += 0.2f;
+        swordRange += 0.2f;
+        hammerRange += 0.3f;
         arrowMaxDistance += 1.5f;
         stunTime += 0.1f;
         arrowStunTime += 0.1f;
@@ -116,7 +120,8 @@ public class StatsManager : MonoBehaviour
         playerSprite.color = originalColor;
         playerTransform.localScale = originalScale;
         damage = originalDamage;
-        weaponRange = originalWeaponRange;
+        swordRange = originalSwordRange;
+        hammerRange = originalHammerRange;
         arrowMaxDistance = originalArrowMaxDistance;
         stunTime = originalStunTime;
         arrowStunTime = originalArrowStunTime;

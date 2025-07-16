@@ -3,14 +3,15 @@ using System.Collections;
 
 using TMPro;
 using UnityEngine.Rendering;
-using System.Collections.Generic; // Add this at the top
+using System.Collections.Generic;
+using Unity.VisualScripting; // Add this at the top
 
 public class EnemySpawner : MonoBehaviour
 {
     [System.Serializable]
     public class Wave
     {
-        public int enemyCount = 5;
+        public int numEnemies = 5;
         public float spawnInterval = 1f;
     }
 
@@ -25,13 +26,20 @@ public class EnemySpawner : MonoBehaviour
     public Transform[] spawnPoints;
     public Wave[] waves;
     public float timeBetweenWaves = 5f;
-    public int maxEnemies = 20;
+    public CutSceneManager cutSceneManager;
 
     public TMP_Text waveAnnouncementText;
     public CanvasGroup waveCanvas;
     private float fadeDuration = 0.5f;
     private int currentWaveIndex = 0;
     private int enemyCount = 0;
+    private bool isPaused = false;
+    private List<Enemy_Movement> activeEnemies = new List<Enemy_Movement>();
+    public int numberToSpawn = 15;
+    public float delayToSpawn = 2;
+    public int increaseSpawn = 2;
+    public float decreaseDelayBy = 0.3f;
+    public float increaseTimeBetweenWaves;
 
     void Start()
     {
@@ -42,36 +50,70 @@ public class EnemySpawner : MonoBehaviour
     {
         while (currentWaveIndex < waves.Length)
         {
+            while (isPaused) yield return null;
+
             yield return StartCoroutine(ShowWaveAnnouncement(currentWaveIndex + 1));
-            // resets abilities every wave
-            if (StatsManager.Instance.regenHealth)
-            {
-                if (StatsManager.Instance.currentHealth < StatsManager.Instance.maxHealth)
-                {
-                    StatsManager.Instance.currentHealth += 1;
-                }
-            }
-            if (StatsManager.Instance.shieldAbility)
-            {
-                StatsManager.Instance.shieldActive = true;
-            }
-            if (StatsManager.Instance.stealth)
-            {
-                StatsManager.Instance.stealthUsed = false;
-            }
+            ResetAbilities();
+            
             Wave wave = waves[currentWaveIndex];
-            for (int i = 0; i < wave.enemyCount; i++)
+            for (int i = 0; i < wave.numEnemies; i++)
             {
-                if (enemyCount < maxEnemies)
-                {
-                    SpawnEnemy();
-                }
+                SpawnEnemy();
+                
                 yield return new WaitForSeconds(wave.spawnInterval);
             }
 
             currentWaveIndex++;
             yield return new WaitForSeconds(timeBetweenWaves);
         }
+    }
+    private void ResetAbilities()
+    {
+        // resets abilities every wave
+        if (StatsManager.Instance.regenHealth)
+        {
+            if (StatsManager.Instance.currentHealth < StatsManager.Instance.maxHealth)
+            {
+                StatsManager.Instance.currentHealth += 1;
+            }
+        }
+        if (StatsManager.Instance.shieldAbility)
+        {
+            StatsManager.Instance.shieldActive = true;
+        }
+        if (StatsManager.Instance.stealth)
+        {
+            StatsManager.Instance.stealthUsed = false;
+        }
+    }
+
+    public IEnumerator SpawnInfiniteWaves()
+    {
+        while (true)
+        {
+            currentWaveIndex++;
+
+            yield return StartCoroutine(ShowWaveAnnouncement(currentWaveIndex));
+            ResetAbilities();
+
+            for (int i = 0; i < numberToSpawn; i++)
+            {
+                SpawnEnemy();
+
+                yield return new WaitForSeconds(delayToSpawn);
+            }
+
+            numberToSpawn += increaseSpawn;
+            delayToSpawn -= decreaseDelayBy;
+            timeBetweenWaves += increaseTimeBetweenWaves;
+            yield return new WaitForSeconds(timeBetweenWaves);
+        }
+    }
+
+
+    public int GetCurrentWave()
+    {
+        return currentWaveIndex;
     }
 
     IEnumerator ShowWaveAnnouncement(int waveNumber)
@@ -107,13 +149,13 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        if (enemyCount >= maxEnemies) return;
-
         Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        GameObject selectedPrefab = GetRandomEnemy();
-
-        Instantiate(selectedPrefab, spawnPoint.position, Quaternion.identity);
+        GameObject enemyObj = Instantiate(GetRandomEnemy(), spawnPoint.position, Quaternion.identity);
         enemyCount++;
+
+        Enemy_Movement movement = enemyObj.GetComponent<Enemy_Movement>();
+        activeEnemies.Add(movement);
+
     }
 
     private GameObject GetRandomEnemy()
@@ -150,8 +192,35 @@ public class EnemySpawner : MonoBehaviour
         Enemy_Health.OnEnemyDeath -= HandleEnemyDeath;
     }
 
-    private void HandleEnemyDeath()
+    private void HandleEnemyDeath(GameObject enemyObj)
     {
         enemyCount--;
+
+        Enemy_Movement movement = enemyObj.GetComponent<Enemy_Movement>();
+        if (movement != null)
+        {
+            activeEnemies.Remove(movement);
+        }
+
+        if (!isPaused && currentWaveIndex == waves.Length && enemyCount <= 0)
+        {
+
+            cutSceneManager.TriggerEndCutscene(true);
+        }
     }
+
+    public void ResumeSpawner()
+    {
+        isPaused = false;
+    }
+    public void PauseSpawner()
+    {
+        isPaused = true;
+        foreach (var enemy in activeEnemies)
+        {
+            enemy.stopMoving = true; // or call enemy.DisableMovement() if you have a method
+        }
+    }
+
+
 }

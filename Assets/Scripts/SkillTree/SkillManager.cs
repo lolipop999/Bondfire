@@ -67,7 +67,8 @@ public class SkillManager : MonoBehaviour
                 break;
             case "IQ":
                 StatsManager.Instance.arrowMaxDistance += 1.5f;
-                StatsManager.Instance.weaponRange += 0.15f;
+                StatsManager.Instance.swordRange += 0.15f;
+                StatsManager.Instance.hammerRange += 0.25f;
                 StatsManager.Instance.stunTime += 0.05f;
                 StatsManager.Instance.arrowStunTime += 0.07f;
                 break;

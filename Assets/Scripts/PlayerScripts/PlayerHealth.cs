@@ -1,11 +1,13 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.Rendering;
 
 public class PlayerHealth : MonoBehaviour
 {
     public TMP_Text healthText;
     public Animator healthTextAnim;
     public SpriteRenderer playerShield;
+    public CutSceneManager cutSceneManager;
 
     private void Start()
     {
@@ -40,7 +42,8 @@ public class PlayerHealth : MonoBehaviour
 
             if (StatsManager.Instance.currentHealth <= 0)
             {
-                gameObject.SetActive(false);
+                // call the game over logic (false = lose)
+                cutSceneManager.TriggerEndCutscene(false);
             }
         }
     }
