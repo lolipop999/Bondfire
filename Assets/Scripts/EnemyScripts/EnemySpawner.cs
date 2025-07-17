@@ -30,7 +30,6 @@ public class EnemySpawner : MonoBehaviour
 
     public TMP_Text waveAnnouncementText;
     public CanvasGroup waveCanvas;
-    private float fadeDuration = 0.5f;
     private int currentWaveIndex = 0;
     private int enemyCount = 0;
     private bool isPaused = false;
@@ -126,25 +125,12 @@ public class EnemySpawner : MonoBehaviour
 
     public void FadeIn()
     {
-        StartCoroutine(FadeCanvas(0f, 1f));
+        StartCoroutine(UIFader.Instance.FadeCanvas(waveCanvas, 0f, 1f, 0.7f));
     }
 
     public void FadeOut()
     {
-        StartCoroutine(FadeCanvas(1f, 0f));
-    }
-
-    private IEnumerator FadeCanvas(float startAlpha, float endAlpha)
-    {
-        float elapsed = 0f;
-        waveCanvas.alpha = startAlpha;
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            waveCanvas.alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / fadeDuration);
-            yield return null;
-        }
-        waveCanvas.alpha = endAlpha;
+        StartCoroutine(UIFader.Instance.FadeCanvas(waveCanvas,1f, 0f, 0.7f));
     }
 
     void SpawnEnemy()

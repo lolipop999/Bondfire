@@ -14,7 +14,6 @@ public class ExpManager : MonoBehaviour
     private int level = 0;
     private int currentExp = 0;
     private int expMultiplier = 1;
-    private float fadeDuration = 0.5f;
 
     public static event Action<int> OnLevelUp;
 
@@ -66,30 +65,9 @@ public class ExpManager : MonoBehaviour
     public IEnumerator doubleXP(float duration)
     {
         expMultiplier = 2;
-        // Fade IN
-        yield return StartCoroutine(FadeCanvas(powerupCanvas, 0f, 1f, fadeDuration));
 
-        // Keep the canvas visible for the power‑up’s active time
         yield return new WaitForSeconds(duration);
 
-        // Fade OUT
-        yield return StartCoroutine(FadeCanvas(powerupCanvas, 1f, 0f, fadeDuration));
-
         expMultiplier = 1;
-    }
-
-    private IEnumerator FadeCanvas(CanvasGroup cg, float from, float to, float time)
-    {
-        cg.alpha = from;
-        float t = 0f;
-
-        while (t < time)
-        {
-            t += Time.deltaTime;
-            cg.alpha = Mathf.Lerp(from, to, t / time);
-            yield return null;
-        }
-
-        cg.alpha = to;
     }
 }
