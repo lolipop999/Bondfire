@@ -34,8 +34,11 @@ public class Player_Sword : MonoBehaviour
             FXManager.Instance.PlaySound(FXManager.Instance.swordHitEnemy, 0.3f);
             foreach (Collider2D enemy in enemies)
             {
-                enemy.GetComponent<Enemy_Health>().ChangeHealth(-StatsManager.Instance.damage);
+                if (enemy != null)
+                {
+                    enemy.GetComponent<Enemy_Health>().ChangeHealth(-StatsManager.Instance.damage);
                 enemy.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.knockbackForce, StatsManager.Instance.knockbackTime, StatsManager.Instance.stunTime);
+                }
             }
         }
         else

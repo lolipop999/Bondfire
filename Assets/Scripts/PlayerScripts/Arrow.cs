@@ -54,9 +54,15 @@ public class Arrow : MonoBehaviour
             float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, rotationSpeed * Time.fixedDeltaTime);
             transform.eulerAngles = new Vector3(0, 0, newAngle);
             slowdownRate = 0.99f;
-            if (distanceTraveled >= StatsManager.Instance.arrowMaxDistance * 1.5)
+            if (distanceTraveled >= StatsManager.Instance.arrowMaxDistance * 1.5) // arrow starts to fall down
             {
-                // BUG: when hits ground arrow always looks exactly like sprite
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, LayerMask.GetMask("Water"));
+                if (hit.collider != null) // Water detected directly below during fall
+                {
+                    Destroy(gameObject);
+                    return; // prevent rest of code running
+                }
+                // arrow buries itself into ground
                 rb.linearVelocity = Vector2.zero;
                 float saveAngle = transform.eulerAngles.z;
                 sr.sprite = buriedArrow;

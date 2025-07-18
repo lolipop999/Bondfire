@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4070754814710287065}
   - component: {fileID: 2691014404189209400}
   - component: {fileID: 455050975544883746}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arrow_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,17 +177,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 4070754814710287065}
   direction: {x: 1, y: 0}
-  speed: 10
-  damage: 2
-  knockbackForce: 10
-  knockbackTime: 0.2
-  stunTime: 0.3
-  maxTravelDistance: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 64
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 256
   sr: {fileID: 5712819931063077502}
   buriedArrow: {fileID: -6662812116773042688, guid: 7329c40c22e767346b1547ccae5e5f63, type: 3}

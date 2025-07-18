@@ -37,15 +37,19 @@ public class Player_Bow : MonoBehaviour
 
     private void HandleAiming()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        // Get mouse position in world space
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos.z = 0f;
 
-        if (horizontal != 0 || vertical != 0)
-        {
-            aimDirection = new Vector2(horizontal, vertical).normalized;
-            anim.SetFloat("aimX", aimDirection.x);
-            anim.SetFloat("aimY", aimDirection.y);
-        }
+        // Get direction from player to mouse
+        Vector2 direction = (mouseWorldPos - transform.position).normalized;
+
+        // Set aim direction
+        aimDirection = direction;
+
+        anim.SetFloat("aimX", aimDirection.x);
+        anim.SetFloat("aimY", aimDirection.y);
+        
     }
     private void OnEnable()
     {

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7467819609176855473}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 6087030519395892519}
   - component: {fileID: 7458602958345263428}
   - component: {fileID: 1436106963772698739}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Wizard
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: b50029256043aac43ac10a0781038de5, type: 2}
   playerLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 8
   attackPoint: {fileID: 7467819609176855473}
   beamPrefab: {fileID: 5905396929466218408, guid: 1765de3672e96e44e9d42a38421980dd, type: 3}
   magicBurst: {fileID: 4916846502507412451, guid: 8bcd84330f3d9e54fa91c5cef94021e5, type: 3}
@@ -187,9 +187,10 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: b50029256043aac43ac10a0781038de5, type: 2}
   playerLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 8
   detectionPoint: {fileID: 4145149478057863335}
   stealth: 0
+  stopMoving: 0
 --- !u!50 &3036923447401349163
 Rigidbody2D:
   serializedVersion: 5
@@ -330,7 +331,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4145149478057863335}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: DetectionPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

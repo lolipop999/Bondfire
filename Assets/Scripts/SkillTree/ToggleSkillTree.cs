@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class ToggleSkillTree : MonoBehaviour
@@ -16,23 +17,36 @@ public class ToggleSkillTree : MonoBehaviour
             if (statsOpen)
             {
                 Time.timeScale = 1;
-                StartCoroutine(UIFader.Instance.FadeCanvas(skillsCanvas, 1, 0, 0.5f));
-                skillsCanvas.blocksRaycasts = false;
-                skillsCanvas.interactable = false;
-                StartCoroutine(UIFader.Instance.FadeCanvas(statsCanvas, 1, 0, 0.5f));
-                statsOpen = false;
+                StartCoroutine(CloseStats());
             }
             else
             {
-                Time.timeScale = 0;
-                FXManager.Instance.PlaySound(FXManager.Instance.openStats, 0.3f);
-                StartCoroutine(UIFader.Instance.FadeCanvas(skillsCanvas, 0, 1, 0.5f));
-                skillsCanvas.blocksRaycasts = true;
-                skillsCanvas.interactable = true;
-                statsOn();
-                StartCoroutine(UIFader.Instance.FadeCanvas(statsCanvas, 0, 1, 0.5f));
-                statsOpen = true;
+                StartCoroutine(OpenStats());
             }
         }
+    }
+
+    IEnumerator CloseStats()
+    {
+        StartCoroutine(UIFader.Instance.FadeCanvas(skillsCanvas, 1, 0, 0.5f));
+        yield return StartCoroutine(UIFader.Instance.FadeCanvas(statsCanvas, 1, 0, 0.5f));
+        skillsCanvas.blocksRaycasts = false;
+        skillsCanvas.interactable = false;
+        statsOpen = false;
+    }
+
+    IEnumerator OpenStats()
+    {
+        StartCoroutine(UIFader.Instance.FadeCanvas(skillsCanvas, 0, 1, 0.5f));
+        StartCoroutine(UIFader.Instance.FadeCanvas(statsCanvas, 0, 1, 0.5f));
+        FXManager.Instance.PlaySound(FXManager.Instance.openStats, 0.3f);
+        skillsCanvas.blocksRaycasts = true;
+        skillsCanvas.interactable = true;
+        statsOn();
+        statsOpen = true;
+
+        yield return new WaitForSeconds(0.5f);
+
+        Time.timeScale = 0;
     }
 }
