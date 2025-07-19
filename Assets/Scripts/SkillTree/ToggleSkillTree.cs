@@ -5,13 +5,20 @@ using UnityEngine;
 public class ToggleSkillTree : MonoBehaviour
 {
     public CanvasGroup skillsCanvas;
-    private bool statsOpen = false;
     public CanvasGroup statsCanvas;
     public static event Action statsOn;
+    private PlayerMovement playerMovement;
+    private bool statsOpen = false;
+
+    void Start()
+    {
+        playerMovement = FindFirstObjectByType<PlayerMovement>();
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (!playerMovement.isActive) return;
         if (Input.GetButtonDown("ToggleStats"))
         {
             if (statsOpen)

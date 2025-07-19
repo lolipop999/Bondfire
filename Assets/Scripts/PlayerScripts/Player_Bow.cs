@@ -9,10 +9,15 @@ public class Player_Bow : MonoBehaviour
     public Animator anim;
     public PlayerMovement playerMovement;
 
+    void Start()
+    {
+        playerMovement = FindFirstObjectByType<PlayerMovement>();
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (!playerMovement.isActive) return;
         shootTimer -= Time.deltaTime;
         HandleAiming();
         if (Input.GetButtonDown("ShootArrow") && shootTimer <= 0)
@@ -46,6 +51,16 @@ public class Player_Bow : MonoBehaviour
 
         // Set aim direction
         aimDirection = direction;
+
+        // Flip player direction based on horizontal aim
+        if (aimDirection.x < 0 && playerMovement.facingDirection == 1)
+        {
+            playerMovement.flip(); // now facing left
+        }
+        else if (aimDirection.x > 0 && playerMovement.facingDirection == -1)
+        {
+            playerMovement.flip(); // now facing right
+        }
 
         anim.SetFloat("aimX", aimDirection.x);
         anim.SetFloat("aimY", aimDirection.y);

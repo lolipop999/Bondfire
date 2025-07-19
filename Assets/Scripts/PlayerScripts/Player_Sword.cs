@@ -5,10 +5,16 @@ public class Player_Sword : MonoBehaviour
     public Animator anim;
     public Transform attackPoint;
     public LayerMask enemyLayer;
-
+    private PlayerMovement playerMovement;
     private float timer;
+
+    void Start()
+    {
+        playerMovement = FindFirstObjectByType<PlayerMovement>();
+    }
     private void Update()
     {
+        if (!playerMovement.isActive) return;
         if (timer > 0)
         {
             timer -= Time.deltaTime;

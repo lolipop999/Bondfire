@@ -13,9 +13,11 @@ public class PlayerMovement : MonoBehaviour
     public int facingDirection = 1; // 1 is right, -1 is left
     private bool isKnockedBack;
     public bool isShooting;
+    public bool isActive = true;
 
     void Update() // fastest way to get feedback
     { // handles stealth ability
+        
         if (StatsManager.Instance.stealth && !StatsManager.Instance.stealthUsed)
         {
             if (Input.GetButtonDown("StealthAbility"))
@@ -29,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called 50x per second
     void FixedUpdate() 
     { // handles movement
+        if (!isActive) return;
         if (isShooting == true)
         {
             rb.linearVelocity = Vector2.zero;
@@ -51,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void flip()
+    public void flip()
     {
         facingDirection *= -1;
         Vector3 scale = transform.localScale;
@@ -71,15 +74,6 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(stunTime);
         rb.linearVelocity = Vector2.zero;
-        isKnockedBack = false;
-    }
-
-    public void EnableKnockback()
-    {
-        isKnockedBack = true;
-    }
-    public void DisableKnockback()
-    {
         isKnockedBack = false;
     }
 }

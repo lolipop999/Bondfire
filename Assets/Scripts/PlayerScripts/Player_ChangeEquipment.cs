@@ -11,16 +11,20 @@ public class Player_ChangeEquipment : MonoBehaviour
     private enum EquipmentMode { Sword, Archer, Hammer }
     private EquipmentMode currentMode = EquipmentMode.Sword;
     private List<EquipmentMode> availableModes = new List<EquipmentMode>();
+    private PlayerMovement playerMovement;
 
     void Start()
     {
         anim = GetComponent<Animator>();
+        playerMovement = FindFirstObjectByType<PlayerMovement>();
         BuildAvailableModes();
         SetMode(currentMode); // Start in Sword
     }
 
     void Update()
     {
+        if (!playerMovement.isActive) return;
+        
         if (Input.GetButtonDown("ChangeEquipment"))
         {
             // Build the mode list in case the player unlocked something mid-game

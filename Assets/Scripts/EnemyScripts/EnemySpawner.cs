@@ -4,7 +4,9 @@ using System.Collections;
 using TMPro;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
-using Unity.VisualScripting; // Add this at the top
+using Unity.VisualScripting;
+using System;
+using Random = UnityEngine.Random; // Add this at the top
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -25,20 +27,22 @@ public class EnemySpawner : MonoBehaviour
     public List<EnemyType> enemyTypes;
     public Transform[] spawnPoints;
     public Wave[] waves;
-    public float timeBetweenWaves = 5f;
+    public float timeBetweenWaves = 3f;
     public CutSceneManager cutSceneManager;
 
     public TMP_Text waveAnnouncementText;
     public CanvasGroup waveCanvas;
-    private int currentWaveIndex = 0;
-    private int enemyCount = 0;
-    private bool isPaused = false;
-    private List<Enemy_Movement> activeEnemies = new List<Enemy_Movement>();
     public int numberToSpawn = 15;
     public float delayToSpawn = 2;
     public int increaseSpawn = 2;
     public float decreaseDelayBy = 0.3f;
-    public float increaseTimeBetweenWaves;
+    public bool hasWon = false;
+    private int currentWaveIndex = 0;
+    private int enemyCount = 0;
+    private bool isPaused = false;
+    private List<Enemy_Movement> activeEnemies = new List<Enemy_Movement>();
+    private bool nextWave = false;
+
 
     void Start()
     {
@@ -50,6 +54,7 @@ public class EnemySpawner : MonoBehaviour
         while (currentWaveIndex < waves.Length)
         {
             while (isPaused) yield return null;
+            nextWave = false;
 
             yield return StartCoroutine(ShowWaveAnnouncement(currentWaveIndex + 1));
             ResetAbilities();
@@ -61,8 +66,13 @@ public class EnemySpawner : MonoBehaviour
                 
                 yield return new WaitForSeconds(wave.spawnInterval);
             }
-
             currentWaveIndex++;
+            while (!nextWave)
+            {
+                yield return null;
+            }
+            
+            
             yield return new WaitForSeconds(timeBetweenWaves);
         }
     }
@@ -91,6 +101,7 @@ public class EnemySpawner : MonoBehaviour
         while (true)
         {
             currentWaveIndex++;
+            nextWave = false;
 
             yield return StartCoroutine(ShowWaveAnnouncement(currentWaveIndex));
             ResetAbilities();
@@ -103,8 +114,17 @@ public class EnemySpawner : MonoBehaviour
             }
 
             numberToSpawn += increaseSpawn;
-            delayToSpawn -= decreaseDelayBy;
-            timeBetweenWaves += increaseTimeBetweenWaves;
+            if (delayToSpawn > 0.5)
+            {
+                delayToSpawn -= decreaseDelayBy;
+            }
+            // wait for all enimies to die to finish before continuing
+            while (!nextWave)
+            {
+                yield return null;
+            }
+
+            yield return StartCoroutine(WaveCleared(currentWaveIndex));
             yield return new WaitForSeconds(timeBetweenWaves);
         }
     }
@@ -112,12 +132,28 @@ public class EnemySpawner : MonoBehaviour
 
     public int GetCurrentWave()
     {
-        return currentWaveIndex;
+        return Math.Max(1, currentWaveIndex);
     }
 
     IEnumerator ShowWaveAnnouncement(int waveNumber)
     {
         waveAnnouncementText.text = $"Wave {waveNumber} Incoming!";
+        FadeIn();
+        yield return new WaitForSeconds(2f);
+        FadeOut();
+    }
+
+    IEnumerator WaveCleared(int waveNumber)
+    {
+        if (hasWon)
+        {
+            waveAnnouncementText.text = $"Wave {waveNumber} Cleared!";
+        }
+        else
+        {
+            waveAnnouncementText.text = $"Wave {waveNumber} / {waves.Length} Cleared!";
+        }
+    
         FadeIn();
         yield return new WaitForSeconds(2f);
         FadeOut();
@@ -190,10 +226,16 @@ public class EnemySpawner : MonoBehaviour
 
         if (!isPaused && currentWaveIndex == waves.Length && enemyCount <= 0)
         {
-
+            hasWon = true;
+            nextWave = true;
             cutSceneManager.TriggerEndCutscene(true);
         }
+        else if (enemyCount <= 0)
+        {
+            nextWave = true;
+        }
     }
+
 
     public void ResumeSpawner()
     {
@@ -208,5 +250,8 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-
+    public int GetAllWaves()
+    {
+        return waves.Length;
+    }
 }
