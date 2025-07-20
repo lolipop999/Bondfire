@@ -5,6 +5,7 @@ public class MainMenu : MonoBehaviour
 {
     public CanvasGroup infoCanvas;
     public CanvasGroup mainMenu;
+    public CanvasGroup creditsCanvas;
     public void StartGame()
     {
         SceneManager.LoadScene("GameScene");
@@ -12,20 +13,35 @@ public class MainMenu : MonoBehaviour
 
     public void ShowInfo()
     {
-        infoCanvas.alpha = 1;
+        StartCoroutine(UIFader.Instance.FadeCanvas(mainMenu, 1, 0, 0.5f));
+        mainMenu.interactable = false;
+        mainMenu.blocksRaycasts = false;
+
+        StartCoroutine(UIFader.Instance.FadeCanvas(infoCanvas, 0, 1, 0.5f));
         infoCanvas.interactable = true;
         infoCanvas.blocksRaycasts = true;
+    }
 
-        mainMenu.alpha = 0;
+    public void ShowCredits()
+    {
+        StartCoroutine(UIFader.Instance.FadeCanvas(creditsCanvas, 0, 1, 0.5f));
+        creditsCanvas.interactable = true;
+        creditsCanvas.blocksRaycasts = true;
+
+        StartCoroutine(UIFader.Instance.FadeCanvas(mainMenu, 1, 0, 0.5f));
         mainMenu.interactable = false;
         mainMenu.blocksRaycasts = false;
     }
 
     public void Back()
     {
-        infoCanvas.alpha = 0;
+        StartCoroutine(UIFader.Instance.FadeCanvas(infoCanvas, 1, 0, 0.5f));
         infoCanvas.interactable = false;
         infoCanvas.blocksRaycasts = false;
+
+        StartCoroutine(UIFader.Instance.FadeCanvas(creditsCanvas, 1, 0, 0.5f));
+        creditsCanvas.interactable = false;
+        creditsCanvas.blocksRaycasts = false;
 
         mainMenu.alpha = 1;
         mainMenu.interactable = true;

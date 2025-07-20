@@ -36,6 +36,10 @@ public class Player_Bow : MonoBehaviour
             
             shootTimer = StatsManager.Instance.shootCooldown;
         }
+    }
+
+    public void NotShooting()
+    {
         anim.SetBool("isShooting", false);
         playerMovement.isShooting = false;
     }
@@ -64,7 +68,7 @@ public class Player_Bow : MonoBehaviour
 
         anim.SetFloat("aimX", aimDirection.x);
         anim.SetFloat("aimY", aimDirection.y);
-        
+
     }
     private void OnEnable()
     {

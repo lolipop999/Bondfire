@@ -22,29 +22,37 @@ public class CutSceneManager : MonoBehaviour
     public ExpManager expManager;
     public EnemySpawner enemyScript;
     public SpriteRenderer loadScreen;
+    public PlayableDirector director;
+    public GameObject enemySpawner;
     private bool died;
     private bool wonGame = false;
 
-    /*     void Start()
-            {
-                enemySpawner.SetActive(false);
-                player.alpha = 0;
-                playerXP.alpha = 0;
-                playerMovement.EnableKnockback();
-                playerUI.alpha = 0;
-                director.stopped += OnTimelineFinished;
-                director.Play();
-            }
+    // void Start()
+    // {
+    //     StartCoroutine(StartGame());
+    //     playerXP.alpha = 0;
+    //     playerMovement.isActive = false;
+    //     playerUI.alpha = 0;
+    //     director.stopped += OnTimelineFinished;
+    //     director.Play();
+    // }
 
-            void OnTimelineFinished(PlayableDirector obj)
-            {
-                enemySpawner.SetActive(true);
-                StartCoroutine(FadeCanvas(playerXP, 0, 1, 0.5f));
-                StartCoroutine(FadeCanvas(playerUI, 0, 1, 0.5f));
-                StartCoroutine(FadeCanvas(player, 0, 1, 0.5f));
-                startPlayer.SetActive(false);
-                playerMovement.DisableKnockback();
-            } */
+    // private IEnumerator StartGame()
+    // {
+    //     StartCoroutine(UIFader.Instance.FadeSpriteTo(playerSprite, 0, 0.1f));
+    //     yield return new WaitForSeconds(1);
+    //     yield return StartCoroutine(UIFader.Instance.FadeSpriteTo(loadScreen, 0, 3f));
+    // }
+
+    // void OnTimelineFinished(PlayableDirector obj)
+    // {
+    //     StartCoroutine(UIFader.Instance.FadeCanvas(playerXP, 0, 1, 0.5f));
+    //     StartCoroutine(UIFader.Instance.FadeCanvas(playerUI, 0, 1, 0.5f));
+    //     StartCoroutine(UIFader.Instance.FadeSpriteTo(playerSprite, 1, 0.2f));
+    //     startPlayer.SetActive(false);
+    //     playerMovement.isActive = true;
+    //     enemySpawner.SetActive(true);
+    // }
 
     public void TriggerEndCutscene(bool win)
     {

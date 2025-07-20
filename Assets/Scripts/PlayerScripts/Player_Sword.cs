@@ -15,6 +15,7 @@ public class Player_Sword : MonoBehaviour
     private void Update()
     {
         if (!playerMovement.isActive) return;
+        
         if (timer > 0)
         {
             timer -= Time.deltaTime;
