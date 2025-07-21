@@ -24,8 +24,11 @@ public class CutSceneManager : MonoBehaviour
     public SpriteRenderer loadScreen;
     public PlayableDirector director;
     public GameObject enemySpawner;
+    public CanvasGroup pauseCanvas;
     private bool died;
     private bool wonGame = false;
+    private bool inPause = false;
+    private bool inEnd = false;
 
     // void Start()
     // {
@@ -53,9 +56,18 @@ public class CutSceneManager : MonoBehaviour
     //     playerMovement.isActive = true;
     //     enemySpawner.SetActive(true);
     // }
+    void Update()
+    {
+        if (Input.GetButtonDown("Pause") && !inPause && !inEnd)
+        {
+            inPause = true;
+            StartCoroutine(PauseGame());
+        }
+    }
 
     public void TriggerEndCutscene(bool win)
     {
+        inEnd = true;
         StartCoroutine(UIFader.Instance.FadeCanvas(playerUI, 1, 0, 0.6f));
         StartCoroutine(UIFader.Instance.FadeCanvas(playerXP, 1, 0, 0.6f));
         died = !win;
@@ -150,6 +162,8 @@ public class CutSceneManager : MonoBehaviour
         endInfo.interactable = false;
         endInfo.blocksRaycasts = false;
 
+        inEnd = false;
+
         StartCoroutine(UIFader.Instance.FadeCanvas(playerUI, 0, 1, 0.6f));
         StartCoroutine(UIFader.Instance.FadeCanvas(playerXP, 0, 1, 0.6f));
 
@@ -163,6 +177,19 @@ public class CutSceneManager : MonoBehaviour
         StartCoroutine(Quit());
     }
 
+    public void QuitFromPause()
+    {
+        Time.timeScale = 1;
+        StartCoroutine(PauseToMain());
+    }
+
+    private IEnumerator PauseToMain()
+    {
+        yield return StartCoroutine(UIFader.Instance.FadeCanvas(pauseCanvas, 1, 0, 0.5f));
+        yield return StartCoroutine(UIFader.Instance.FadeSpriteTo(loadScreen, 1, 3f));
+        SceneManager.LoadScene("Menu");
+    }
+
     private IEnumerator Quit()
     {
         yield return StartCoroutine(FadeOut());
@@ -174,5 +201,25 @@ public class CutSceneManager : MonoBehaviour
         StartCoroutine(UIFader.Instance.FadeCanvas(endInfo, 1, 0, 3f));
 
         yield return StartCoroutine(UIFader.Instance.FadeSpriteTo(loadScreen, 1, 3f));
+    }
+
+    public void ReturnToGame()
+    {
+        Time.timeScale = 1;
+        StartCoroutine(UIFader.Instance.FadeCanvas(pauseCanvas, 1, 0, 0.1f));
+        pauseCanvas.interactable = false;
+        pauseCanvas.blocksRaycasts = false;
+        inPause = false;
+    }
+
+    private IEnumerator PauseGame()
+    {
+        StartCoroutine(UIFader.Instance.FadeCanvas(pauseCanvas, 0, 1, 0.2f));
+        pauseCanvas.interactable = true;
+        pauseCanvas.blocksRaycasts = true;
+
+        yield return new WaitForSeconds(0.2f);
+
+        Time.timeScale = 0;
     }
 }

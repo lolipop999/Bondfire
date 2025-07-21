@@ -20,7 +20,7 @@ public class Player_Bow : MonoBehaviour
         if (!playerMovement.isActive) return;
         shootTimer -= Time.deltaTime;
         HandleAiming();
-        if (Input.GetButtonDown("ShootArrow") && shootTimer <= 0)
+        if (Input.GetButtonDown("Attack") && shootTimer <= 0)
         {
             playerMovement.isShooting = true;
             anim.SetBool("isShooting", true);

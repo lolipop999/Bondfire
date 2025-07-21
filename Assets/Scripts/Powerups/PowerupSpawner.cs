@@ -15,10 +15,9 @@ public class PowerupEntry
 public class PowerupSpawner : MonoBehaviour
 {
     public List<PowerupEntry> powerups;
-    public float minSpawnTime = 5f;
-    public float maxSpawnTime = 20f;
-    public Vector2 spawnAreaBottomLeft;
-    public Vector2 spawnAreaTopRight;
+    public float minSpawnTime = 3f;
+    public float maxSpawnTime = 10f;
+    public LayerMask waterLayerMask;
 
     void Start()
     {
@@ -42,10 +41,30 @@ public class PowerupSpawner : MonoBehaviour
 
             if (chosen != null)
             {
-                Vector2 spawnPosition = new Vector2(
-                    Random.Range(spawnAreaBottomLeft.x, spawnAreaTopRight.x),
-                    Random.Range(spawnAreaBottomLeft.y, spawnAreaTopRight.y)
-                );
+                // Get camera bounds
+                Camera cam = Camera.main;
+                Vector2 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
+                Vector2 topRight = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
+
+                Vector2 spawnPosition;
+                int maxAttempts = 10;
+                int attempts = 0;
+
+                do
+                {
+                    spawnPosition = new Vector2(
+                        Random.Range(bottomLeft.x, topRight.x),
+                        Random.Range(bottomLeft.y, topRight.y)
+                    );
+                    attempts++;
+                }
+                while (Physics2D.OverlapPoint(spawnPosition, waterLayerMask) != null && attempts < maxAttempts);
+
+                if (attempts >= maxAttempts)
+                {
+                    // Could not find a suitable spawn location, skip this powerup
+                    continue;
+                }
 
                 GameObject instance = Instantiate(chosen.prefab, spawnPosition, Quaternion.identity);
                 chosen.currentInstances++;

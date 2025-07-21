@@ -40,6 +40,7 @@ public class Player_Hammer : MonoBehaviour
         {
             foreach (Collider2D enemy in enemies)
             {
+                // new sound effect
                 FXManager.Instance.PlaySound(FXManager.Instance.swordHitEnemy);
                 enemy.GetComponent<Enemy_Health>().ChangeHealth(-StatsManager.Instance.damage);
                 enemy.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.knockbackForce, StatsManager.Instance.knockbackTime, StatsManager.Instance.stunTime);

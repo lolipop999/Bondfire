@@ -20,7 +20,7 @@ public class Player_Sword : MonoBehaviour
         {
             timer -= Time.deltaTime;
         }
-        if (Input.GetButtonDown("Slash") && timer <= 0)
+        if (Input.GetButtonDown("Attack") && timer <= 0)
         {
             Attack();
         }
