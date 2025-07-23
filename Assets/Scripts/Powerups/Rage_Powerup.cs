@@ -11,7 +11,7 @@ public class Rage_Powerup : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !powerupUI.isActive)
         {
             StatsManager.Instance.StartCoroutine(StatsManager.Instance.RageEffect(boostDuration));
             powerupUI.ShowPowerup(boostDuration, "Rage");

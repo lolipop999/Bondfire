@@ -15,4 +15,4 @@ MonoBehaviour:
   skillName: HammerMode
   maxLevel: 1
   skillIcon: {fileID: -5431640271881036569, guid: 7b159d1cc8ba121459d51260dc2d1bcd, type: 3}
-  cost: 5
+  cost: 3

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: IQ2
   m_EditorClassIdentifier: 
   skillName: IQ
-  maxLevel: 2
+  maxLevel: 5
   skillIcon: {fileID: 21300000, guid: 6067068975ee73f43a794a20984f341f, type: 3}
-  cost: 4
+  cost: 3

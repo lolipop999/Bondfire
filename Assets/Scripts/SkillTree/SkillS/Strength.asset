@@ -15,4 +15,4 @@ MonoBehaviour:
   skillName: Strength
   maxLevel: 3
   skillIcon: {fileID: 21300000, guid: 390ad723c4d84b54c85df422c73eacfc, type: 3}
-  cost: 3
+  cost: 2

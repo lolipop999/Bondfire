@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Strength2
   m_EditorClassIdentifier: 
   skillName: Strength
-  maxLevel: 3
+  maxLevel: 5
   skillIcon: {fileID: 21300000, guid: 0dabf9b169c3bbf49b8acef0d74efa74, type: 3}
   cost: 4

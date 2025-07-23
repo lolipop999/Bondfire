@@ -4,7 +4,7 @@ public class PowerupInstance : MonoBehaviour
 {
     private PowerupEntry powerupEntry;
     private PowerupSpawner spawner;
-    public float lifetime = 10f; // Time until despawn
+    private float lifetime = 20f; // Time until despawn
 
     public void Setup(PowerupEntry entry, PowerupSpawner sourceSpawner)
     {

@@ -43,6 +43,8 @@ public class PlayerHealth : MonoBehaviour
             if (StatsManager.Instance.currentHealth <= 0)
             {
                 // call the game over logic (false = lose)
+                EnemySpawner enemySpawner = FindFirstObjectByType<EnemySpawner>();
+                enemySpawner.ResetEnemyStatsToOriginal();
                 cutSceneManager.TriggerEndCutscene(false);
             }
         }

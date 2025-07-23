@@ -24,6 +24,23 @@ public class EnemySpawner : MonoBehaviour
         public int weight = 1; // Higher = more likely to spawn
     }
 
+    [System.Serializable]
+    public class EnemyScalingProfile
+    {
+        public EnemyData enemyData;
+
+        public float speedIncreasePerWave = 0.1f;
+        public int healthIncreaseEveryNWaves = 1;
+        public int damageIncreaseEveryNWaves = 3;
+        public float cooldownReductionPerWave = 0.05f;
+        public float idleTimeReduction = 0.2f;
+        public float stunTimeIncrease = 0.1f;
+        public float knockbackIncrease = 0.3f;
+        public float attackRangeIncrease = 0.1f;
+        public int xpRewardIncrease = 1;
+    }
+
+    public List<EnemyScalingProfile> enemyScalingProfiles;
     public List<EnemyType> enemyTypes;
     public Transform[] spawnPoints;
     public Wave[] waves;
@@ -42,10 +59,12 @@ public class EnemySpawner : MonoBehaviour
     private bool isPaused = false;
     private List<Enemy_Movement> activeEnemies = new List<Enemy_Movement>();
     private bool nextWave = false;
+    private Dictionary<EnemyData, EnemyData> originalEnemyStats = new Dictionary<EnemyData, EnemyData>();
 
 
     void Start()
     {
+        SaveOriginalEnemyStats();
         StartCoroutine(SpawnWaves());
     }
 
@@ -58,12 +77,12 @@ public class EnemySpawner : MonoBehaviour
 
             yield return StartCoroutine(ShowWaveAnnouncement(currentWaveIndex + 1));
             ResetAbilities();
-            
+
             Wave wave = waves[currentWaveIndex];
             for (int i = 0; i < wave.numEnemies; i++)
             {
                 SpawnEnemy();
-                
+
                 yield return new WaitForSeconds(wave.spawnInterval);
             }
             currentWaveIndex++;
@@ -71,9 +90,9 @@ public class EnemySpawner : MonoBehaviour
             {
                 yield return null;
             }
-            
-            
+
             yield return new WaitForSeconds(timeBetweenWaves);
+            ScaleEnemyStats(currentWaveIndex);
         }
     }
     private void ResetAbilities()
@@ -101,6 +120,7 @@ public class EnemySpawner : MonoBehaviour
         while (true)
         {
             currentWaveIndex++;
+            ScaleEnemyStats(currentWaveIndex);
             nextWave = false;
 
             yield return StartCoroutine(ShowWaveAnnouncement(currentWaveIndex));
@@ -129,6 +149,32 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    private void ScaleEnemyStats(int waveNumber)
+    {
+        foreach (var profile in enemyScalingProfiles)
+        {
+            EnemyData data = profile.enemyData;
+
+            data.speed += profile.speedIncreasePerWave;
+
+            if (waveNumber % profile.healthIncreaseEveryNWaves == 0)
+            {
+                data.maxHealth += 1;
+            }
+            if (waveNumber % profile.damageIncreaseEveryNWaves == 0)
+            {
+                data.damage += 1;
+            }
+
+            data.idleTime = Math.Max(0, data.idleTime - profile.idleTimeReduction);
+            data.stunTime = Math.Max(2f, data.stunTime + profile.stunTimeIncrease);
+            data.knockbackForce += profile.knockbackIncrease;
+            data.attackRange += profile.attackRangeIncrease;
+            data.expReward += profile.xpRewardIncrease;
+            data.attackCoolDown = Mathf.Max(0.3f, data.attackCoolDown - profile.cooldownReductionPerWave);
+        }
+    }
+
 
     public int GetCurrentWave()
     {
@@ -153,7 +199,7 @@ public class EnemySpawner : MonoBehaviour
         {
             waveAnnouncementText.text = $"Wave {waveNumber} / {waves.Length} Cleared!";
         }
-    
+
         FadeIn();
         yield return new WaitForSeconds(2f);
         FadeOut();
@@ -166,7 +212,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void FadeOut()
     {
-        StartCoroutine(UIFader.Instance.FadeCanvas(waveCanvas,1f, 0f, 0.7f));
+        StartCoroutine(UIFader.Instance.FadeCanvas(waveCanvas, 1f, 0f, 0.7f));
     }
 
     void SpawnEnemy()
@@ -228,6 +274,7 @@ public class EnemySpawner : MonoBehaviour
         {
             hasWon = true;
             nextWave = true;
+            ResetEnemyStatsToOriginal();
             cutSceneManager.TriggerEndCutscene(true);
         }
         else if (enemyCount <= 0)
@@ -254,4 +301,48 @@ public class EnemySpawner : MonoBehaviour
     {
         return waves.Length;
     }
+
+    private void SaveOriginalEnemyStats()
+    {
+        foreach (var profile in enemyScalingProfiles)
+        {
+            var original = ScriptableObject.CreateInstance<EnemyData>();
+
+            original.speed = profile.enemyData.speed;
+            original.maxHealth = profile.enemyData.maxHealth;
+            original.damage = profile.enemyData.damage;
+            original.attackRange = profile.enemyData.attackRange;
+            original.attackCoolDown = profile.enemyData.attackCoolDown;
+            original.expReward = profile.enemyData.expReward;
+            original.knockbackForce = profile.enemyData.knockbackForce;
+            original.stunTime = profile.enemyData.stunTime;
+            original.playerDetectRange = profile.enemyData.playerDetectRange;
+            original.idleTime = profile.enemyData.idleTime;
+            original.forcedChaseDuration = profile.enemyData.forcedChaseDuration;
+
+            originalEnemyStats[profile.enemyData] = original;
+        }
+    }
+
+    public void ResetEnemyStatsToOriginal()
+    {
+        foreach (var kvp in originalEnemyStats)
+        {
+            EnemyData data = kvp.Key;
+            EnemyData original = kvp.Value;
+
+            data.speed = original.speed;
+            data.maxHealth = original.maxHealth;
+            data.damage = original.damage;
+            data.attackRange = original.attackRange;
+            data.attackCoolDown = original.attackCoolDown;
+            data.expReward = original.expReward;
+            data.knockbackForce = original.knockbackForce;
+            data.stunTime = original.stunTime;
+            data.playerDetectRange = original.playerDetectRange;
+            data.idleTime = original.idleTime;
+            data.forcedChaseDuration = original.forcedChaseDuration;
+        }
+    }
+
 }

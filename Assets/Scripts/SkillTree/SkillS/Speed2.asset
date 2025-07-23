@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da526d9d54e72c54d9195e9273d3f05d, type: 3}
   m_Name: Speed2
   m_EditorClassIdentifier: 
-  skillName: 
-  maxLevel: 2
+  skillName: Speed
+  maxLevel: 3
   skillIcon: {fileID: 21300000, guid: 7c922d8864eff2140ae57be7668a5d64, type: 3}
-  cost: 4
+  cost: 3

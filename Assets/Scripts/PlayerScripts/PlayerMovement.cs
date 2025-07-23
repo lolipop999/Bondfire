@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Input.GetButtonDown("StealthAbility"))
             {
-                StealthManager.Instance.ActivateStealth(StatsManager.Instance.stealthLevel * 3);
+                StealthManager.Instance.ActivateStealth(StatsManager.Instance.stealthLevel * 2.5f);
                 StatsManager.Instance.stealthUsed = true;
             }
         }

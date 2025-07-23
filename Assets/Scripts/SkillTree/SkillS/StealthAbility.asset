@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: StealthAbility
   m_EditorClassIdentifier: 
   skillName: Stealth
-  maxLevel: 3
+  maxLevel: 5
   skillIcon: {fileID: -5388147255464793046, guid: b8d5b56cf0d0ca54b97c65229e840b10, type: 3}
   cost: 3

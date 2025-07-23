@@ -15,4 +15,4 @@ MonoBehaviour:
   skillName: ArcherMode
   maxLevel: 1
   skillIcon: {fileID: -7033695032449837365, guid: a2f41f05cbec2dc4b84032b352ea2c43, type: 3}
-  cost: 5
+  cost: 4
