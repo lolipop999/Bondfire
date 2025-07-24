@@ -15,4 +15,4 @@ MonoBehaviour:
   skillName: HealthRegen
   maxLevel: 1
   skillIcon: {fileID: 21300000, guid: 2750ac73780a2bc43a69da5ed43fd6f4, type: 3}
-  cost: 3
+  cost: 2

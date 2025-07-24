@@ -32,7 +32,7 @@ public class SkillSlot : MonoBehaviour
         if (isUnlocked && currentLevel < skillSO.maxLevel)
         {
             currentLevel++;
-            FXManager.Instance.PlaySound(FXManager.Instance.shopPurchase);
+            FXManager.Instance.PlaySound(FXManager.Instance.shopPurchase, 0.3f);
             OnAbilityPointSpent?.Invoke(this);
             UpdateUI();
 

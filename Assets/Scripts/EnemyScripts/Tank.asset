@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Tank
   m_EditorClassIdentifier: 
   speed: 1
-  maxHealth: 5
+  maxHealth: 4
   damage: 1
-  attackRange: 2
-  attackCoolDown: 3
-  expReward: 10
+  attackRange: 1.7
+  attackCoolDown: 3.3
+  expReward: 11
   knockbackForce: 10
-  stunTime: 0.3
+  stunTime: 0.2
   playerDetectRange: 7
   idleTime: 5
   forcedChaseDuration: 10

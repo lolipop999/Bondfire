@@ -54,6 +54,8 @@ public class EnemySpawner : MonoBehaviour
     public int increaseSpawn = 2;
     public float decreaseDelayBy = 0.3f;
     public bool hasWon = false;
+    public TMP_Text enemiesRemainingText;
+    public Animator enemiesLeftAnim;
     private int currentWaveIndex = 0;
     private int enemyCount = 0;
     private bool isPaused = false;
@@ -90,7 +92,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 yield return null;
             }
-
+            yield return StartCoroutine(WaveCleared(currentWaveIndex));
             yield return new WaitForSeconds(timeBetweenWaves);
             ScaleEnemyStats(currentWaveIndex);
         }
@@ -149,6 +151,13 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    private void UpdateEnemiesRemainingUI()
+    {
+        enemiesRemainingText.text = $"Enemies Remaining: {enemyCount}";
+        enemiesLeftAnim.Play("TextUpdate");
+    }
+
+
     private void ScaleEnemyStats(int waveNumber)
     {
         foreach (var profile in enemyScalingProfiles)
@@ -167,7 +176,7 @@ public class EnemySpawner : MonoBehaviour
             }
 
             data.idleTime = Math.Max(0, data.idleTime - profile.idleTimeReduction);
-            data.stunTime = Math.Max(2f, data.stunTime + profile.stunTimeIncrease);
+            data.stunTime = Math.Min(2f, data.stunTime + profile.stunTimeIncrease);
             data.knockbackForce += profile.knockbackIncrease;
             data.attackRange += profile.attackRangeIncrease;
             data.expReward += profile.xpRewardIncrease;
@@ -223,7 +232,7 @@ public class EnemySpawner : MonoBehaviour
 
         Enemy_Movement movement = enemyObj.GetComponent<Enemy_Movement>();
         activeEnemies.Add(movement);
-
+        UpdateEnemiesRemainingUI();
     }
 
     private GameObject GetRandomEnemy()
@@ -281,6 +290,7 @@ public class EnemySpawner : MonoBehaviour
         {
             nextWave = true;
         }
+        UpdateEnemiesRemainingUI();
     }
 
 

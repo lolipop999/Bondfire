@@ -35,18 +35,15 @@ public class Player_Hammer : MonoBehaviour
     public void SmashDamage()
     {
         Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position, StatsManager.Instance.hammerRange, enemyLayer);
-
+        FXManager.Instance.PlaySound(FXManager.Instance.hammerAttack, 0.3f);
         if (enemies.Length > 0)
         {
             foreach (Collider2D enemy in enemies)
             {
-                // new sound effect
-                FXManager.Instance.PlaySound(FXManager.Instance.swordHitEnemy);
                 enemy.GetComponent<Enemy_Health>().ChangeHealth(-StatsManager.Instance.damage);
-                enemy.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.knockbackForce, StatsManager.Instance.knockbackTime, StatsManager.Instance.stunTime);
+                enemy.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.knockbackForce * 1.3f, StatsManager.Instance.knockbackTime, StatsManager.Instance.stunTime * 1.3f);
             }
         }
-        FXManager.Instance.PlaySound(FXManager.Instance.swordSwing);
     }
 
     public void FinishSmash()

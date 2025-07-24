@@ -46,17 +46,23 @@ public class SkillManager : MonoBehaviour
                 break;
             case "Strength":
                 StatsManager.Instance.damage += 1;
+                StatsManager.Instance.arrowDamage += 1;
                 StatsManager.Instance.knockbackForce *= 1.1f;
                 StatsManager.Instance.stunTime *= 1.1f;
+                StatsManager.Instance.arrowKnockbackForce *= 1.1f;
+                StatsManager.Instance.arrowKnockbackTime *= 1.1f;
+                StatsManager.Instance.arrowMaxDistance += 1;
+                StatsManager.Instance.arrowSpeed += 0.5f;
                 break;
             case "CurrentHealth":
                 StatsManager.Instance.currentHealth += 1; // not showing animation
                 break;
             case "LongRangeArcher":
-                StatsManager.Instance.arrowMaxDistance = 10;
-                StatsManager.Instance.arrowSpeed = 11;
-                StatsManager.Instance.arrowStunTime = 0.5f;
-                StatsManager.Instance.arrowKnockbackForce = 10f;
+                StatsManager.Instance.arrowMaxDistance += 6;
+                StatsManager.Instance.arrowSpeed += 4;
+                StatsManager.Instance.arrowStunTime += 0.3f;
+                StatsManager.Instance.arrowKnockbackForce += 5;
+                StatsManager.Instance.arrowDamage += 1;
                 break;
             case "HealthRegen":
                 StatsManager.Instance.regenHealth = true;

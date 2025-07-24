@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     void Update() // fastest way to get feedback
     { // handles stealth ability
         
-        if (StatsManager.Instance.stealth && !StatsManager.Instance.stealthUsed)
+        if (StatsManager.Instance.stealth && !StatsManager.Instance.stealthUsed && isActive)
         {
             if (Input.GetButtonDown("StealthAbility"))
             {

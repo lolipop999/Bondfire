@@ -35,8 +35,8 @@ public class ToggleSkillTree : MonoBehaviour
 
     IEnumerator CloseStats()
     {
-        StartCoroutine(UIFader.Instance.FadeCanvas(statsCanvas, 1, 0, 0.5f));
-        yield return StartCoroutine(UIFader.Instance.FadeCanvas(skillsCanvas, 1, 0, 0.5f));
+        StartCoroutine(UIFader.Instance.FadeCanvas(statsCanvas, 1, 0, 0.05f));
+        yield return StartCoroutine(UIFader.Instance.FadeCanvas(skillsCanvas, 1, 0, 0.05f));
         skillsCanvas.blocksRaycasts = false;
         skillsCanvas.interactable = false;
         statsOpen = false;
@@ -44,9 +44,9 @@ public class ToggleSkillTree : MonoBehaviour
 
     IEnumerator OpenStats()
     {
-        StartCoroutine(UIFader.Instance.FadeCanvas(skillsCanvas, 0, 1, 0.5f));
-        StartCoroutine(UIFader.Instance.FadeCanvas(statsCanvas, 0, 1, 0.5f));
-        FXManager.Instance.PlaySound(FXManager.Instance.openStats, 0.3f);
+        StartCoroutine(UIFader.Instance.FadeCanvas(skillsCanvas, 0, 1, 0.1f));
+        StartCoroutine(UIFader.Instance.FadeCanvas(statsCanvas, 0, 1, 0.1f));
+        FXManager.Instance.PlaySound(FXManager.Instance.openStats, 0.2f);
         skillsCanvas.blocksRaycasts = true;
         skillsCanvas.interactable = true;
         statsOn(); 

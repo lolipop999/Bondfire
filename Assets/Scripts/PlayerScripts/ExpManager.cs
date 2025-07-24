@@ -7,7 +7,7 @@ using System.Collections;
 public class ExpManager : MonoBehaviour
 {
     public int expToLevel = 10;
-    public float expGrowthMultiplier = 1.2f;
+    public float expGrowthMultiplier = 1.13f;
     public Slider expSlider;
     public TMP_Text currentLevelText;
     public CanvasGroup powerupCanvas;
@@ -40,7 +40,7 @@ public class ExpManager : MonoBehaviour
     private void LevelUp()
     {
         level++;
-        FXManager.Instance.PlaySound(FXManager.Instance.levelUp);
+        FXManager.Instance.PlaySound(FXManager.Instance.levelUp, 0.3f);
         currentExp -= expToLevel;
         expToLevel = Mathf.RoundToInt(expToLevel * expGrowthMultiplier);
         OnLevelUp?.Invoke(1);

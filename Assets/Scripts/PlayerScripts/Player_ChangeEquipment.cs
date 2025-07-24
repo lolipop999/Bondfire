@@ -60,7 +60,7 @@ public class Player_ChangeEquipment : MonoBehaviour
 
         if (playSound)
         {
-            FXManager.Instance.PlaySound(FXManager.Instance.changeEquipment, 0.5f);
+            FXManager.Instance.PlaySound(FXManager.Instance.changeEquipment, 0.3f);
         }
     }
 

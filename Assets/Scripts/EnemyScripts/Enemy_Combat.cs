@@ -34,7 +34,7 @@ public class Enemy_Combat : MonoBehaviour
             // minion
             else
             {
-                FXManager.Instance.PlaySound(FXManager.Instance.enemyHitPlayer, 0.3f);
+                FXManager.Instance.PlaySound(FXManager.Instance.enemyHitPlayer, 0.2f);
             }
         }
     }
@@ -61,14 +61,18 @@ public class Enemy_Combat : MonoBehaviour
 
     private void WizardAttack(Collider2D player)
     {
-        StartCoroutine(ShootBeam(player.transform));
+        StartCoroutine(WizardCoroutine(player));
     }
-    
+
+    private IEnumerator WizardCoroutine(Collider2D player)
+    {
+        yield return StartCoroutine(ShootBeam(player.transform));
+    }
     private IEnumerator ShootBeam(Transform target)
     {
         // sound effect
         FXManager.Instance.PlaySound(FXManager.Instance.wizardZap, 0.5f);
-        GameObject beam = Instantiate(beamPrefab);
+        GameObject beam = Instantiate(beamPrefab, attackPoint.position, Quaternion.identity, transform);
         LineRenderer lr = beam.GetComponent<LineRenderer>();
 
         Vector3 start = attackPoint.position;

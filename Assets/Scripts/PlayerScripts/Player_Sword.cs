@@ -44,7 +44,7 @@ public class Player_Sword : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.GetComponent<Enemy_Health>().ChangeHealth(-StatsManager.Instance.damage);
-                enemy.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.knockbackForce, StatsManager.Instance.knockbackTime, StatsManager.Instance.stunTime);
+                    enemy.GetComponent<Enemy_Knockback>().Knockback(transform, StatsManager.Instance.knockbackForce, StatsManager.Instance.knockbackTime, StatsManager.Instance.stunTime);
                 }
             }
         }

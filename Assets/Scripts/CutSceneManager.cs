@@ -25,43 +25,45 @@ public class CutSceneManager : MonoBehaviour
     public PlayableDirector director;
     public GameObject enemySpawner;
     public CanvasGroup pauseCanvas;
+    public CanvasGroup enemiesLeftCanvas;
     private bool died;
     private bool wonGame = false;
     private bool inPause = false;
     private bool inEnd = false;
 
-    // void Start()
-    // {
-    //     StartCoroutine(StartGame());
-    //     playerXP.alpha = 0;
-    //     playerMovement.isActive = false;
-    //     playerUI.alpha = 0;
-    //     director.stopped += OnTimelineFinished;
-    //     director.Play();
-    // }
+    void Start()
+    {
+        StartCoroutine(StartGame());
+        playerXP.alpha = 0;
+        playerMovement.isActive = false;
+        playerUI.alpha = 0;
+        director.stopped += OnTimelineFinished;
+        director.Play();
+    }
 
-    // private IEnumerator StartGame()
-    // {
-    //     StartCoroutine(UIFader.Instance.FadeSpriteTo(playerSprite, 0, 0.1f));
-    //     yield return new WaitForSeconds(1);
-    //     yield return StartCoroutine(UIFader.Instance.FadeSpriteTo(loadScreen, 0, 3f));
-    // }
+    private IEnumerator StartGame()
+    {
+        // player must be alpha 0
+        // load screen must be alpha 1
+        yield return StartCoroutine(UIFader.Instance.FadeSpriteTo(loadScreen, 0, 3f));
+    }
 
-    // void OnTimelineFinished(PlayableDirector obj)
-    // {
-    //     StartCoroutine(UIFader.Instance.FadeCanvas(playerXP, 0, 1, 0.5f));
-    //     StartCoroutine(UIFader.Instance.FadeCanvas(playerUI, 0, 1, 0.5f));
-    //     StartCoroutine(UIFader.Instance.FadeSpriteTo(playerSprite, 1, 0.2f));
-    //     startPlayer.SetActive(false);
-    //     playerMovement.isActive = true;
-    //     enemySpawner.SetActive(true);
-    // }
+    void OnTimelineFinished(PlayableDirector obj)
+    {
+        StartCoroutine(UIFader.Instance.FadeCanvas(playerXP, 0, 1, 0.5f));
+        StartCoroutine(UIFader.Instance.FadeCanvas(playerUI, 0, 1, 0.5f));
+        StartCoroutine(UIFader.Instance.FadeCanvas(enemiesLeftCanvas, 0, 1, 0.5f));
+        StartCoroutine(UIFader.Instance.FadeSpriteTo(playerSprite, 1, 0.2f));
+        startPlayer.SetActive(false);
+        playerMovement.isActive = true;
+        enemySpawner.SetActive(true);
+    }
     void Update()
     {
         if (Input.GetButtonDown("Pause") && !inPause && !inEnd)
         {
             inPause = true;
-            StartCoroutine(PauseGame());
+            PauseGame();
         }
     }
 
@@ -70,6 +72,7 @@ public class CutSceneManager : MonoBehaviour
         inEnd = true;
         StartCoroutine(UIFader.Instance.FadeCanvas(playerUI, 1, 0, 0.6f));
         StartCoroutine(UIFader.Instance.FadeCanvas(playerXP, 1, 0, 0.6f));
+        StartCoroutine(UIFader.Instance.FadeCanvas(enemiesLeftCanvas, 1, 0, 0.6f));
         died = !win;
 
         if (!died)
@@ -169,6 +172,7 @@ public class CutSceneManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
+        StartCoroutine(UIFader.Instance.FadeCanvas(enemiesLeftCanvas, 0, 1, 0.6f));
         StartCoroutine(enemyScript.SpawnInfiniteWaves());
     }
 
@@ -206,20 +210,17 @@ public class CutSceneManager : MonoBehaviour
     public void ReturnToGame()
     {
         Time.timeScale = 1;
-        StartCoroutine(UIFader.Instance.FadeCanvas(pauseCanvas, 1, 0, 0.1f));
+        pauseCanvas.alpha = 0;
         pauseCanvas.interactable = false;
         pauseCanvas.blocksRaycasts = false;
         inPause = false;
     }
 
-    private IEnumerator PauseGame()
+    private void PauseGame()
     {
-        StartCoroutine(UIFader.Instance.FadeCanvas(pauseCanvas, 0, 1, 0.2f));
+        pauseCanvas.alpha = 1;
         pauseCanvas.interactable = true;
         pauseCanvas.blocksRaycasts = true;
-
-        yield return new WaitForSeconds(0.2f);
-
         Time.timeScale = 0;
     }
 }

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b1f477c0ce3ab346bac83a2843ae471, type: 3}
   m_Name: Wizard
   m_EditorClassIdentifier: 
-  speed: 1.5
+  speed: 1.4
   maxHealth: 1
   damage: 1
-  attackRange: 3.3
+  attackRange: 3
   attackCoolDown: 4
-  expReward: 9
+  expReward: 10
   knockbackForce: 3
   stunTime: 0.1
   playerDetectRange: 10
-  idleTime: 2
+  idleTime: 3
   forcedChaseDuration: 5

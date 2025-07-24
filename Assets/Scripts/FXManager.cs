@@ -18,6 +18,7 @@ public class FXManager : MonoBehaviour
     public AudioClip heal;
     public AudioClip wizardZap;
     public AudioClip rockSmash;
+    public AudioClip hammerAttack;
 
     private AudioSource audioSource;
     void Awake()

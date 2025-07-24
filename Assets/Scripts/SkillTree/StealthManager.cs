@@ -34,7 +34,7 @@ public class StealthManager : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         OnStealthChanged?.Invoke(false);
-        IsStealthActive = true;
+        IsStealthActive = false;
 
         playerSprite.color = origColor;
     }
